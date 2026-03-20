@@ -1,16 +1,58 @@
-# React + Vite
+# ResumeForge 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ResumeForge is a fast, 100% private, and completely free client-side resume builder designed to help you create professional, ATS-optimized PDF resumes in minutes. Your data never leaves your browser, and no sign-up is required.
 
-Currently, two official plugins are available:
+## Features ✨
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **100% Free & Private:** No accounts, no data tracking, and no server uploads. Your data stays securely on your device.
+- **Fast Builder:** A clean, intuitive interface that lets you fill in your details and instantly generate a resume.
+- **Professional PDF Export:** High-quality, single-column, system-font PDFs that pass every Applicant Tracking System (ATS) parser seamlessly.
+- **No Sign-Up Required:** Instantly start building without jumping through hoops.
 
-## React Compiler
+## Tech Stack 🛠️
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend Framework:** React 19 + Vite
+- **Styling:** Custom CSS with a sleek, modern, glassmorphic UI
+- **State Management:** Zustand (with local storage persistence)
+- **Icons:** Lucide-React
+- **PDF Generation:** `@react-pdf/renderer`
 
-## Expanding the ESLint configuration
+## Getting Started 💻
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+To get a local copy up and running, follow these simple steps:
+
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
+
+### Installation
+
+1. **Clone the repository** (or download the source code):
+   ```bash
+   git clone https://github.com/your-username/resume-maker.git
+   cd resume-maker
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser** and navigate to:
+   ```
+   http://localhost:5173
+   ```
+
+## Usage 📝
+
+1. Go through the step-by-step wizard to fill out your **Personal Information**, **Summary**, **Experience**, **Education**, **Skills**, and **Projects**.
+2. You can switch to the Live Preview panel at any time by clicking the "eye" icon in the top right.
+3. Once satisfied, click the **Export PDF** button to download a pristine, ATS-friendly resume.
+
+## License 📜
+
+This project is open-source and available for anyone to use or fork! 
