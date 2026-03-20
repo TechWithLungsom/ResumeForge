@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ResumeForge ATS-2026 Resume Schema",
+  "description": "Standardized resume data structure for 95%+ ATS match rate. Flat structure, ISO dates, standard headers.",
+  "type": "object",
+  "required": ["personalInfo", "experience", "education", "skills"],
+  "properties": {
+    "personalInfo": {
+      "type": "object",
+      "description": "Contact information — ATS Header: CONTACT INFORMATION",
+      "required": ["fullName", "email", "phone"],
+      "properties": {
+        "fullName": { "type": "string", "minLength": 1 },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "location": { "type": "string", "description": "City, State format" },
+        "linkedin": { "type": "string", "format": "uri" },
+        "portfolio": { "type": "string", "format": "uri" },
+        "github": { "type": "string", "format": "uri" }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "description": "Professional Summary — ATS Header: PROFESSIONAL SUMMARY. 2-4 sentences max.",
+      "maxLength": 500
+    },
+    "experience": {
+      "type": "array",
+      "description": "Work Experience — ATS Header: WORK EXPERIENCE",
+      "items": {
+        "type": "object",
+        "required": ["company", "title", "startDate", "bullets"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "company": { "type": "string" },
+          "title": { "type": "string" },
+          "location": { "type": "string" },
+          "startDate": { "type": "string", "pattern": "^\\d{4}-(0[1-9]|1[0-2])$", "description": "ISO YYYY-MM" },
+          "endDate": { "type": ["string", "null"], "pattern": "^\\d{4}-(0[1-9]|1[0-2])$", "description": "ISO YYYY-MM or null for current" },
+          "isCurrent": { "type": "boolean", "default": false },
+          "bullets": {
+            "type": "array",
+            "description": "Achievement bullet points using X-Y-Z formula",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "maxItems": 6
+          }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "description": "Education — ATS Header: EDUCATION",
+      "items": {
+        "type": "object",
+        "required": ["institution", "degree", "field"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "institution": { "type": "string" },
+          "degree": { "type": "string", "description": "e.g., Bachelor of Science, Master of Arts" },
+          "field": { "type": "string", "description": "Field of study / Major" },
+          "startDate": { "type": "string", "pattern": "^\\d{4}-(0[1-9]|1[0-2])$" },
+          "endDate": { "type": ["string", "null"], "pattern": "^\\d{4}-(0[1-9]|1[0-2])$" },
+          "gpa": { "type": ["string", "null"] },
+          "honors": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "description": "Skills — ATS Header: SKILLS. Flat list, no nested categories in PDF output.",
+      "items": {
+        "type": "object",
+        "required": ["category", "items"],
+        "properties": {
+          "category": { "type": "string", "description": "e.g., Programming Languages, Frameworks, Tools" },
+          "items": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "description": "Projects — ATS Header: PROJECTS",
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "technologies": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "link": { "type": ["string", "null"], "format": "uri" },
+          "startDate": { "type": ["string", "null"], "pattern": "^\\d{4}-(0[1-9]|1[0-2])$" },
+          "endDate": { "type": ["string", "null"], "pattern": "^\\d{4}-(0[1-9]|1[0-2])$" }
+        }
+      }
+    },
+    "certifications": {
+      "type": "array",
+      "description": "Certifications — ATS Header: CERTIFICATIONS",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "issuer": { "type": "string" },
+          "date": { "type": ["string", "null"], "pattern": "^\\d{4}-(0[1-9]|1[0-2])$" },
+          "credentialId": { "type": ["string", "null"] }
+        }
+      }
+    }
+  },
+  "atsMetadata": {
+    "version": "2026-ATS-v1",
+    "format": "single-column",
+    "fonts": "system-fonts-only",
+    "dateFormat": "ISO-8601-YYYY-MM",
+    "nestedTables": false,
+    "graphicsAllowed": false
+  }
+}

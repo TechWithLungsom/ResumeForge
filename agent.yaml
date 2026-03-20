@@ -1,0 +1,80 @@
+# AI-Powered Resume Maker — Multi-Agent Hierarchy
+# ================================================
+
+name: ResumeForge AI
+version: 1.0.0
+description: Production-ready, AI-Powered Resume Maker with 95%+ ATS match rate
+
+agents:
+  architect:
+    role: Lead Systems Architect / Orchestrator
+    goal: >
+      Project structure, state management (React 19 + Zustand),
+      and inter-agent coordination.
+    primary_task: >
+      Create and maintain ResumeSchema.json — a standardized data structure
+      that all other agents must follow. Ensure ATS-2026 compliance:
+      standard headers, ISO dates, no nested tables, single-column layout.
+    owns:
+      - src/schema/ResumeSchema.json
+      - src/store/resumeStore.js
+      - src/App.jsx
+      - agent.yaml
+    coordinates:
+      - parser
+      - content-writer
+
+  parser:
+    role: ATS Expert / PDF Engineer
+    goal: >
+      Logic for PDF generation and keyword optimization.
+    primary_task: >
+      Build a "Keyword Extraction Skill" using Gemini. Take a user's
+      job description, identify high-intent keywords, and calculate a
+      "Match Score" against the current JSON resume.
+    constraints:
+      - Enforce strict single-column, system-font PDF export via @react-pdf/renderer
+      - No nested tables, no multi-column layouts, no graphics in PDF
+      - All section headers must be ATS-standard
+    owns:
+      - src/services/atsService.js
+      - src/services/pdfExport.js
+      - src/components/ats/ATSScorePanel.jsx
+
+  content-writer:
+    role: Career Coach / UX Writer
+    goal: >
+      UX writing and AI-driven bullet point generation.
+    primary_task: >
+      Implement the "X-Y-Z Action Formula" (Accomplished [X] as measured
+      by [Y], by doing [Z]). Provide real-time suggestions to rewrite
+      user experiences to sound more impactful.
+    owns:
+      - src/services/contentService.js
+      - src/components/ai/AIWriterButton.jsx
+
+workflow:
+  phase_1:
+    name: Architecture
+    agent: architect
+    tasks:
+      - Create file structure and JSON schema
+      - Set up Zustand store and routing
+  phase_2:
+    name: ATS Engine
+    agent: parser
+    tasks:
+      - Build ATS scoring engine
+      - Implement PDF export logic
+  phase_3:
+    name: Content AI
+    agent: content-writer
+    tasks:
+      - Implement Gemini-powered "Tailor for Job" UI feature
+      - Build X-Y-Z Action Formula rewriter
+  phase_4:
+    name: Integration
+    agents: [architect, parser, content-writer]
+    tasks:
+      - Collaborate to verify code in browser
+      - Run ATS simulator validation
