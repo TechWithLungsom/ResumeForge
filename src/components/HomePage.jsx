@@ -71,9 +71,10 @@ const HomePage = ({ onGetStarted }) => {
               <span className="stat-number">Fast</span>
               <span className="stat-label">Builder</span>
             </div>
+            <div className="hero-stat-sep" />
             <div className="hero-stat">
-              <span className="stat-number">100%</span>
-              <span className="stat-label">Free & Private</span>
+              <span className="stat-number">No Sign-Up</span>
+              <span className="stat-label">Required</span>
             </div>
           </div>
         </div>
