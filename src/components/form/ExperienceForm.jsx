@@ -1,16 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useResumeStore } from '../../store/resumeStore';
+import { Briefcase, Plus, Trash2, GripVertical, Sparkles, RefreshCw, Check, X } from 'lucide-react';
+import { improveBullet } from '../../services/geminiAI';
 
-import { Briefcase, Plus, Trash2, GripVertical } from 'lucide-react';
+// ─── AI Bullet Improver sub-component ───
+function BulletRow({ expId, bIndex, bullet, title, company, onUpdate, onRemove, showRemove }) {
+  const [improving, setImproving] = useState(false);
+  const [suggestion, setSuggestion] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleImprove = async () => {
+    if (!bullet.trim()) return;
+    setImproving(true);
+    setError(null);
+    setSuggestion(null);
+    try {
+      const result = await improveBullet(bullet, title, company);
+      setSuggestion(result);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setImproving(false);
+    }
+  };
+
+  return (
+    <div className="bullet-row">
+      <span className="bullet-number">{bIndex + 1}</span>
+      <div className="bullet-input-group">
+        <input
+          className="bullet-input"
+          placeholder="Increased revenue by 25% by implementing a new pricing strategy..."
+          value={bullet}
+          onChange={(e) => onUpdate(e.target.value)}
+          id={`bullet-${expId}-${bIndex}`}
+        />
+        <div className="ai-writer-container">
+          <button
+            className="ai-improve-btn"
+            onClick={handleImprove}
+            disabled={improving || !bullet.trim()}
+            id={`improve-bullet-${expId}-${bIndex}`}
+          >
+            {improving
+              ? <><RefreshCw size={11} className="spin" /> Improving…</>
+              : <><Sparkles size={11} /> AI Improve</>}
+          </button>
+          {error && <span className="ai-error">{error}</span>}
+          {suggestion && (
+            <div className="ai-suggestion">
+              <p className="suggestion-label">✨ AI Suggestion</p>
+              <p className="suggestion-text">{suggestion}</p>
+              <div className="suggestion-actions">
+                <button className="accept-btn" onClick={() => { onUpdate(suggestion); setSuggestion(null); }}>
+                  <Check size={11} /> Use This
+                </button>
+                <button className="dismiss-btn" onClick={() => setSuggestion(null)}>
+                  <X size={11} /> Dismiss
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {showRemove && (
+        <button className="remove-bullet-btn" onClick={onRemove}>
+          <Trash2 size={12} />
+        </button>
+      )}
+    </div>
+  );
+}
 
 const ExperienceForm = () => {
-  const experience = useResumeStore((s) => s.experience);
-  const addExperience = useResumeStore((s) => s.addExperience);
+  const experience     = useResumeStore((s) => s.experience);
+  const addExperience  = useResumeStore((s) => s.addExperience);
   const removeExperience = useResumeStore((s) => s.removeExperience);
   const updateExperience = useResumeStore((s) => s.updateExperience);
-  const updateBullet = useResumeStore((s) => s.updateBullet);
-  const addBullet = useResumeStore((s) => s.addBullet);
-  const removeBullet = useResumeStore((s) => s.removeBullet);
+  const updateBullet   = useResumeStore((s) => s.updateBullet);
+  const addBullet      = useResumeStore((s) => s.addBullet);
+  const removeBullet   = useResumeStore((s) => s.removeBullet);
 
   return (
     <div className="form-section">
@@ -18,7 +87,7 @@ const ExperienceForm = () => {
         <Briefcase size={22} />
         Work Experience
       </h2>
-      <p className="form-section-desc">List your most recent roles.</p>
+      <p className="form-section-desc">List your most recent roles. Use the ✨ AI Improve button to enhance each bullet point.</p>
 
       {experience.map((exp, index) => (
         <div key={exp.id} className="entry-card">
@@ -91,23 +160,17 @@ const ExperienceForm = () => {
           <div className="bullets-section">
             <label>Achievement Bullets</label>
             {exp.bullets.map((bullet, bIndex) => (
-              <div key={bIndex} className="bullet-row">
-                <span className="bullet-number">{bIndex + 1}</span>
-                <div className="bullet-input-group">
-                  <input
-                    className="bullet-input"
-                    placeholder="Increased revenue by 25% by implementing a new pricing strategy..."
-                    value={bullet}
-                    onChange={(e) => updateBullet(exp.id, bIndex, e.target.value)}
-                  />
-
-                </div>
-                {exp.bullets.length > 1 && (
-                  <button className="remove-bullet-btn" onClick={() => removeBullet(exp.id, bIndex)}>
-                    <Trash2 size={12} />
-                  </button>
-                )}
-              </div>
+              <BulletRow
+                key={bIndex}
+                expId={exp.id}
+                bIndex={bIndex}
+                bullet={bullet}
+                title={exp.title}
+                company={exp.company}
+                onUpdate={(val) => updateBullet(exp.id, bIndex, val)}
+                onRemove={() => removeBullet(exp.id, bIndex)}
+                showRemove={exp.bullets.length > 1}
+              />
             ))}
             {exp.bullets.length < 6 && (
               <button className="add-bullet-btn" onClick={() => addBullet(exp.id)}>

@@ -8,12 +8,13 @@ import EducationForm from './components/form/EducationForm';
 import SkillsForm from './components/form/SkillsForm';
 import ProjectsForm from './components/form/ProjectsForm';
 import ResumePreview from './components/preview/ResumePreview';
+import ATSScorePanel from './components/ats/ATSScorePanel';
 
 import HomePage from './components/HomePage';
 import {
   User, FileText, Briefcase, GraduationCap, Wrench,
   FolderOpen, Download, Settings, X, ChevronLeft,
-  ChevronRight, Zap, RotateCcw, Eye, EyeOff, Home
+  ChevronRight, Zap, RotateCcw, Eye, EyeOff, Home, Brain
 } from 'lucide-react';
 
 const steps = [
@@ -139,6 +140,9 @@ function App() {
                 Next <ChevronRight size={18} />
               </button>
             </div>
+
+            {/* AI ATS Score Panel */}
+            <ATSScorePanel />
           </div>
         </div>
 
